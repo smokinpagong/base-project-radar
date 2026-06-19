@@ -1,4 +1,5 @@
 # 📡 Base Project Radar
+Created and maintained by [smokinturtle](https://github.com/smokinpagong).
 
 A simple website that tracks interesting projects building on **Base** (the Ethereum layer-2 network) — all in one searchable place.
 
