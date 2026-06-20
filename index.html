@@ -414,6 +414,17 @@
     border-radius:var(--radius);
   }
   .modal-links a:hover{ background:var(--signal-blue-dim); text-decoration:none; }
+  .copy-btn{
+     font-family:"JetBrains Mono",monospace;
+     font-size:13px;
+     border:1px solid var(--grid-line);
+     background:var(--panel);
+     color:var(--paper);
+     padding:8px 14px;
+     border-radius:var(--radius);
+     cursor:pointer;
+   }
+   .copy-btn:hover{ border-color:var(--scan-green); color:var(--scan-green); }
 
   /* ---------- submit form ---------- */
   .field{ margin-bottom:14px; display:flex; flex-direction:column; gap:6px; }
@@ -818,11 +829,16 @@ function openDetail(p){
     </div>
     <p class="desc">${escapeHtml(p.description || p.summary)}</p>
     <div class="modal-links">
-      <a href="${p.link}" target="_blank" rel="noopener noreferrer">Visit website ↗</a>
-    </div>
-  `;
-  detailOverlay.classList.add("open");
-}
+         <a href="${p.link}" target="_blank" rel="noopener noreferrer">Visit website ↗</a>
+         <button class="copy-btn" id="copyLinkBtn" type="button">Copy link</button>
+       </div>
+     `;
+     detailOverlay.classList.add("open");
+     document.getElementById("copyLinkBtn").addEventListener("click", () => {
+       navigator.clipboard.writeText(p.link);
+       showToast("Link copied!");
+     });
+   }
 
 function closeModal(overlay){ overlay.classList.remove("open"); }
 document.addEventListener("keydown", (e) => {
