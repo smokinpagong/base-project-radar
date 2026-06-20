@@ -858,6 +858,12 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
   sortMode = e.target.value;
   renderGrid();
 });
+  document.addEventListener("keydown", (e) => {
+     if (e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+       e.preventDefault();
+       document.getElementById("searchInput").focus();
+     }
+   });
 
 /* ---------------------------------------------------
    STATS
