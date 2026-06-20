@@ -549,6 +549,7 @@
 
   <footer>
     <div>Base Project Radar — a fan-made tracker, not affiliated with Base or Coinbase.</div>
+    <div class="mono" style="font-size:12px;color:var(--fog);">Page loaded: <span id="lastUpdated"></span></div>
  <div><a href="ROADMAP.md">Roadmap</a> &nbsp;·&nbsp; <a href="README.md">About this project</a> &nbsp;·&nbsp; <a href="https://github.com/smokinturtle/base-project-radar" target="_blank">View on GitHub ↗</a> &nbsp;·&nbsp; <a href="#top">↑ Back to top</a></div>
   </footer>
 </div>
@@ -787,6 +788,7 @@ function toggleBookmark(id){
   if (bookmarks.has(id)) bookmarks.delete(id); else bookmarks.add(id);
   localStorage.setItem("bpr_bookmarks", JSON.stringify([...bookmarks]));
   updateBookmarkUI();
+  document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
   renderGrid();
 }
 function updateBookmarkUI(){
