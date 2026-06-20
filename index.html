@@ -748,9 +748,12 @@ function renderGrid(){
   gridMeta.textContent = `${list.length} project${list.length === 1 ? "" : "s"} on the radar`;
 
   if (list.length === 0) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No signals match that search. Try a different filter or category.</div>`;
-    return;
-  }
+       const message = showBookmarksOnly
+         ? "No bookmarks yet. Tap the star on any project card to save it here."
+         : "No signals match that search. Try a different filter or category.";
+       grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">${message}</div>`;
+       return;
+     }
 
   grid.innerHTML = "";
   list.forEach(p => {
