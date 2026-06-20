@@ -53,6 +53,21 @@
     outline-offset:2px;
     border-radius:4px;
   }
+  .skip-link{
+     position:absolute;
+     top:-40px;
+     left:8px;
+     background:var(--signal-blue);
+     color:#fff;
+     padding:8px 14px;
+     border-radius:8px;
+     z-index:1000;
+     font-family:"JetBrains Mono",monospace;
+     font-size:13px;
+   }
+   .skip-link:focus{
+     top:8px;
+   }
 
   /* ---------- layout shell ---------- */
   .wrap{
@@ -455,8 +470,9 @@
 </style>
 </head>
 <body>
+  <a href="#mainContent" class="skip-link">Skip to content</a>
 
-<div class="wrap">
+<div class="wrap" id="mainContent">
   <header class="topbar" id="top">
     <div class="brand">
       <span class="dot"></span>
