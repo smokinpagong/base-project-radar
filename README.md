@@ -1,5 +1,8 @@
 # 📡 Base Project Radar
 Created and maintained by [smokinturtle](https://github.com/smokinpagong).
+![License](https://img.shields.io/badge/license-MIT-blue)
+   ![Made with](https://img.shields.io/badge/made%20with-HTML%2FCSS%2FJS-0052FF)
+   ![Status](https://img.shields.io/badge/status-MVP-39FF8A)
 
 A simple website that tracks interesting projects building on **Base** (the Ethereum layer-2 network) — all in one searchable place.
 
