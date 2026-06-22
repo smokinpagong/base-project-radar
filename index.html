@@ -834,6 +834,11 @@ function openDetail(p){
          <a href="${p.link}" target="_blank" rel="noopener noreferrer">Visit website ↗</a>
          <button class="copy-btn" id="copyLinkBtn" type="button">Copy link</button>
          <a class="copy-btn" style="text-decoration:none;" href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Found this on Base Project Radar: ' + p.name)}&url=${encodeURIComponent(p.link)}" target="_blank" rel="noopener noreferrer">Share on X</a>
+         <div class="modal-links">
+         <a href="${p.link}" target="_blank" rel="noopener noreferrer">Visit website ↗</a>
+         <button class="copy-btn" id="copyLinkBtn" type="button">Copy link</button>
+         <a class="copy-btn" style="text-decoration:none;" href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Found this on Base Project Radar: ' + p.name)}&url=${encodeURIComponent(p.link)}" target="_blank" rel="noopener noreferrer">Share on X</a>
+         <a class="copy-btn" style="text-decoration:none;" href="https://github.com/smokinturtle/base-project-radar/issues/new?template=suggest-a-project.md&title=${encodeURIComponent('[Edit] ' + p.name)}" target="_blank" rel="noopener noreferrer">Suggest an edit</a>
        </div>
      `;
      detailOverlay.classList.add("open");
