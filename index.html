@@ -376,6 +376,36 @@
     border:1px dashed var(--grid-line);
     border-radius:var(--radius);
   }
+  .radarops-toggle{
+     position:fixed; bottom:24px; left:24px;
+     width:50px; height:50px; border-radius:50%;
+     background:var(--panel); border:1px solid var(--signal-blue);
+     color:var(--paper); font-size:20px; cursor:pointer; z-index:150;
+     display:flex; align-items:center; justify-content:center;
+   }
+   .radarops-toggle:hover{ border-color:var(--scan-green); }
+   .radarops-panel{
+     position:fixed; bottom:84px; left:24px;
+     width:320px; max-height:420px;
+     background:var(--panel); border:1px solid var(--grid-line);
+     border-radius:14px; display:none; flex-direction:column;
+     overflow:hidden; z-index:150;
+   }
+   .radarops-panel.open{ display:flex; }
+   .radarops-header{
+     background:var(--void); border-bottom:1px solid var(--grid-line);
+     padding:12px 14px; display:flex; justify-content:space-between;
+     align-items:center; font-family:"JetBrains Mono",monospace;
+     font-size:12px; letter-spacing:0.08em; color:var(--scan-green);
+   }
+   .radarops-header button{ background:none; border:none; color:var(--fog); cursor:pointer; font-size:15px; }
+   .radarops-messages{ flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:10px; }
+   .radarops-msg{ font-size:13px; line-height:1.4; padding:8px 12px; border-radius:10px; max-width:85%; }
+   .radarops-msg.bot{ background:var(--void); color:var(--paper); align-self:flex-start; }
+   .radarops-msg.user{ background:var(--signal-blue); color:#fff; align-self:flex-end; }
+   .radarops-input-row{ display:flex; border-top:1px solid var(--grid-line); }
+   .radarops-input-row input{ flex:1; background:var(--void); border:none; color:var(--paper); padding:12px 14px; font-family:inherit; font-size:13px; }
+   .radarops-input-row button{ background:var(--signal-blue); border:none; color:#fff; width:46px; cursor:pointer; font-size:15px; }
 
   /* ---------- modal ---------- */
   .overlay{
@@ -660,6 +690,18 @@
 </div>
 
 <div class="toast" id="toast"></div>
+  <button class="radarops-toggle" id="radarOpsToggle" type="button" aria-label="Open Radar Ops chat">📡</button>
+   <div class="radarops-panel" id="radarOpsPanel">
+     <div class="radarops-header">
+       <span>RADAR OPS</span>
+       <button type="button" id="radarOpsClose" aria-label="Close chat">✕</button>
+     </div>
+     <div class="radarops-messages" id="radarOpsMessages"></div>
+     <form class="radarops-input-row" id="radarOpsForm">
+       <input type="text" id="radarOpsInput" placeholder="Ask me about a project or category..." autocomplete="off">
+       <button type="submit" aria-label="Send">➤</button>
+     </form>
+   </div>
   <button class="back-to-top" id="backToTopBtn" type="button" aria-label="Back to top">↑</button>
 
 <script>
@@ -1001,6 +1043,33 @@ updateBookmarkUI();
    });
    document.getElementById("backToTopBtn").addEventListener("click", () => {
      window.scrollTo({top:0, behavior:"smooth"});
+   });
+ const radarOpsPanel = document.getElementById("radarOpsPanel");
+   const radarOpsMessages = document.getElementById("radarOpsMessages");
+   function addRadarOpsMessage(text, sender){
+     const msg = document.createElement("div");
+     msg.className = "radarops-msg " + sender;
+     msg.textContent = text;
+     radarOpsMessages.appendChild(msg);
+     radarOpsMessages.scrollTop = radarOpsMessages.scrollHeight;
+   }
+   document.getElementById("radarOpsToggle").addEventListener("click", () => {
+     radarOpsPanel.classList.toggle("open");
+     if (radarOpsMessages.children.length === 0) {
+       addRadarOpsMessage("📡 Radar Ops online. Try \"show me DeFi\" or \"what's new\".", "bot");
+     }
+   });
+   document.getElementById("radarOpsClose").addEventListener("click", () => {
+     radarOpsPanel.classList.remove("open");
+   });
+   document.getElementById("radarOpsForm").addEventListener("submit", (e) => {
+     e.preventDefault();
+     const input = document.getElementById("radarOpsInput");
+     const text = input.value.trim();
+     if (!text) return;
+     addRadarOpsMessage(text, "user");
+     input.value = "";
+     addRadarOpsMessage("...", "bot");
    });
   console.log("👋 Hey, fellow developer! This radar was hand-built by smokinturtle while learning to code: https://github.com/smokinturtle/base-project-radar");
 </script>
