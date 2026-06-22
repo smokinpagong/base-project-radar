@@ -584,6 +584,7 @@
     </select>
     <button class="btn-primary" id="openSubmitBtn" type="button">+ Submit a project</button>
     <button class="btn-primary" id="surpriseBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">🎲 Surprise me</button>
+    <button class="btn-primary" id="exportBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">⬇ Export bookmarks</button>
   </div>
 
   <section class="grid-section">
@@ -902,6 +903,18 @@ document.getElementById("openSubmitBtn").addEventListener("click", () => submitO
      const list = allProjects();
      const randomProject = list[Math.floor(Math.random() * list.length)];
      openDetail(randomProject);
+   });
+  document.getElementById("exportBtn").addEventListener("click", () => {
+     const bookmarkedList = allProjects().filter(p => bookmarks.has(p.id));
+     if (bookmarkedList.length === 0) { showToast("No bookmarks to export yet"); return; }
+     const blob = new Blob([JSON.stringify(bookmarkedList, null, 2)], {type:"application/json"});
+     const url = URL.createObjectURL(blob);
+     const a = document.createElement("a");
+     a.href = url;
+     a.download = "my-bookmarks.json";
+     a.click();
+     URL.revokeObjectURL(url);
+     showToast("Bookmarks exported!");
    });
 document.getElementById("submitClose").addEventListener("click", () => closeModal(submitOverlay));
 submitOverlay.addEventListener("click", (e) => { if (e.target === submitOverlay) closeModal(submitOverlay); });
