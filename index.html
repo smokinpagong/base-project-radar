@@ -337,6 +337,16 @@
     border-radius:999px;
     padding:4px 10px;
   }
+  .new-badge{
+     font-family:"JetBrains Mono",monospace;
+     font-size:10px;
+     color:#06210f;
+     background:var(--scan-green);
+     border-radius:999px;
+     padding:3px 8px;
+     text-transform:uppercase;
+     letter-spacing:0.05em;
+   }
   .star-btn{
     background:none;
     border:none;
@@ -763,9 +773,9 @@ function renderGrid(){
     card.tabIndex = 0;
     card.innerHTML = `
       <div class="card-top">
-        <div class="card-name">${escapeHtml(p.name)}</div>
-        <div class="status ${p.status.toLowerCase()}"><span class="led"></span>${p.status}</div>
-      </div>
+          <div class="card-name">${escapeHtml(p.name)} ${isNew(p) ? '<span class="new-badge">New</span>' : ""}</div>
+          <div class="status ${p.status.toLowerCase()}"><span class="led"></span>${p.status}</div>
+        </div>
       <div class="card-summary">${escapeHtml(p.summary)}</div>
       <div class="card-bottom">
         <span class="category-tag mono">${escapeHtml(p.category)}</span>
@@ -792,6 +802,10 @@ function escapeHtml(str){
   d.textContent = str;
   return d.innerHTML;
 }
+  function isNew(p){
+     const days = (Date.now() - new Date(p.date)) / 86400000;
+     return days <= 30;
+   }
 
 /* ---------------------------------------------------
    BOOKMARKS
