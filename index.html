@@ -190,9 +190,10 @@
     50%{ opacity:1; transform:scale(1.25); }
   }
   @media (prefers-reduced-motion: reduce){
-    .sweep{ animation:none; }
-    .blip{ animation:none; opacity:.75; }
-  }
+     .sweep{ animation:none; }
+     .blip{ animation:none; opacity:.75; }
+     .card{ animation:none; }
+   }
 
   /* ---------- controls ---------- */
   .controls{
@@ -290,16 +291,21 @@
     gap:16px;
   }
   .card{
-    background:var(--panel);
-    border:1px solid var(--grid-line);
-    border-radius:var(--radius);
-    padding:18px;
-    cursor:pointer;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    transition:border-color .15s, transform .15s;
-  }
+     background:var(--panel);
+     border:1px solid var(--grid-line);
+     border-radius:var(--radius);
+     padding:18px;
+     cursor:pointer;
+     display:flex;
+     flex-direction:column;
+     gap:10px;
+     transition:border-color .15s, transform .15s;
+     animation: card-fade-in .3s ease both;
+   }
+   @keyframes card-fade-in{
+     from{ opacity:0; transform:translateY(6px); }
+     to{ opacity:1; transform:translateY(0); }
+   }
   .card:hover{ border-color:var(--signal-blue); transform:translateY(-2px); }
   .card-top{
     display:flex;
