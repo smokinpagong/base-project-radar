@@ -1,0 +1,7 @@
+cff-version: 1.2.0
+   message: "If you reference this project, please cite it as below."
+   title: "Base Project Radar"
+   authors:
+     - name: "smokinpagong"
+   date-released: 2026-06
+   url: "https://github.com/smokinpagong/base-project-radar"
