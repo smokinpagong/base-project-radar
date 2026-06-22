@@ -551,6 +551,7 @@
       <option value="az">Name A–Z</option>
     </select>
     <button class="btn-primary" id="openSubmitBtn" type="button">+ Submit a project</button>
+    <button class="btn-primary" id="surpriseBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">🎲 Surprise me</button>
   </div>
 
   <section class="grid-section">
@@ -858,6 +859,11 @@ document.addEventListener("keydown", (e) => {
 --------------------------------------------------- */
 const submitOverlay = document.getElementById("submitOverlay");
 document.getElementById("openSubmitBtn").addEventListener("click", () => submitOverlay.classList.add("open"));
+  document.getElementById("surpriseBtn").addEventListener("click", () => {
+     const list = allProjects();
+     const randomProject = list[Math.floor(Math.random() * list.length)];
+     openDetail(randomProject);
+   });
 document.getElementById("submitClose").addEventListener("click", () => closeModal(submitOverlay));
 submitOverlay.addEventListener("click", (e) => { if (e.target === submitOverlay) closeModal(submitOverlay); });
 
