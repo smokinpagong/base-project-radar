@@ -841,14 +841,10 @@ function openDetail(p){
     <div class="status ${p.status.toLowerCase()}"><span class="led"></span>${p.status}</div>
     <h2>${escapeHtml(p.name)}</h2>
     <div class="tag-row">
-      <span>${escapeHtml(p.category)}</span>
-      ${(p.tags || []).map(t => `<span>${escapeHtml(t)}</span>`).join("")}
-    </div>
+         <span>${escapeHtml(p.category)}</span>
+         ${(p.tags || []).map(t => `<span style="cursor:pointer;" onclick="filterByTagFromModal('${escapeHtml(t)}')">${escapeHtml(t)}</span>`).join("")}
+       </div>
     <p class="desc">${escapeHtml(p.description || p.summary)}</p>
-    <div class="modal-links">
-         <a href="${p.link}" target="_blank" rel="noopener noreferrer">Visit website ↗</a>
-         <button class="copy-btn" id="copyLinkBtn" type="button">Copy link</button>
-         <a class="copy-btn" style="text-decoration:none;" href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Found this on Base Project Radar: ' + p.name)}&url=${encodeURIComponent(p.link)}" target="_blank" rel="noopener noreferrer">Share on X</a>
          <div class="modal-links">
          <a href="${p.link}" target="_blank" rel="noopener noreferrer">Visit website ↗</a>
          <button class="copy-btn" id="copyLinkBtn" type="button">Copy link</button>
@@ -864,6 +860,12 @@ function openDetail(p){
    }
 
 function closeModal(overlay){ overlay.classList.remove("open"); }
+  function filterByTagFromModal(tag){
+     closeModal(detailOverlay);
+     document.getElementById("searchInput").value = tag;
+     searchTerm = tag;
+     renderGrid();
+   }
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { closeModal(detailOverlay); closeModal(submitOverlay); }
 });
