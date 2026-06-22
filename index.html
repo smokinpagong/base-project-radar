@@ -478,6 +478,24 @@
     pointer-events:none;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .back-to-top{
+     position:fixed;
+     bottom:24px;
+     right:24px;
+     background:var(--signal-blue);
+     color:#fff;
+     border:none;
+     width:44px;
+     height:44px;
+     border-radius:50%;
+     cursor:pointer;
+     display:none;
+     align-items:center;
+     justify-content:center;
+     font-size:18px;
+     z-index:150;
+   }
+   .back-to-top.show{ display:flex; }
 
   footer{
     border-top:1px solid var(--grid-line);
@@ -634,6 +652,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
+  <button class="back-to-top" id="backToTopBtn" type="button" aria-label="Back to top">↑</button>
 
 <script>
 /* ---------------------------------------------------
@@ -957,6 +976,12 @@ renderStats();
 updateBookmarkUI();
   document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
    document.getElementById("copyrightYear").textContent = new Date().getFullYear();
+  window.addEventListener("scroll", () => {
+     document.getElementById("backToTopBtn").classList.toggle("show", window.scrollY > 400);
+   });
+   document.getElementById("backToTopBtn").addEventListener("click", () => {
+     window.scrollTo({top:0, behavior:"smooth"});
+   });
   console.log("👋 Hey, fellow developer! This radar was hand-built by smokinturtle while learning to code: https://github.com/smokinturtle/base-project-radar");
 </script>
 </body>
