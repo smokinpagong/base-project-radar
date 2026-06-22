@@ -1,0 +1,17 @@
+name: Greet new contributors
+
+   on:
+     issues:
+       types: [opened]
+     pull_request_target:
+       types: [opened]
+
+   jobs:
+     greeting:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/first-interaction@v1
+           with:
+             repo-token: "${{ secrets.GITHUB_TOKEN }}"
+             issue-message: "Thanks for opening your first issue on Base Project Radar! 🛰️"
+             pr-message: "Thanks for your first contribution to Base Project Radar! 🎉"
