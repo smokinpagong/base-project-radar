@@ -848,6 +848,7 @@ let activeCategory = "All";
 let showBookmarksOnly = false;
 let searchTerm = "";
   let statusFilter = "all";
+  let priceData = {};
 let sortMode = "newest";
   const themeToggleBtn = document.getElementById("themeToggleBtn");
    function applyTheme(theme){
@@ -931,6 +932,7 @@ function renderGrid(){
           <div class="status ${p.status.toLowerCase()}"><span class="led"></span>${p.status}</div>
         </div>
       <div class="card-summary">${escapeHtml(p.summary)}</div>
+      ${p.coingeckoId && priceData[p.coingeckoId] ? `<div class="price-tag ${priceData[p.coingeckoId].usd_24h_change >= 0 ? "up" : "down"}">${p.ticker} $${priceData[p.coingeckoId].usd < 1 ? priceData[p.coingeckoId].usd.toFixed(4) : priceData[p.coingeckoId].usd.toFixed(2)}<span>${priceData[p.coingeckoId].usd_24h_change >= 0 ? "▲" : "▼"} ${Math.abs(priceData[p.coingeckoId].usd_24h_change).toFixed(1)}%</span></div>` : ""}
       <div class="card-bottom">
         <span class="category-tag mono">${escapeHtml(p.category)}</span>
         <button class="star-btn ${bookmarks.has(p.id) ? "bookmarked" : ""}" data-id="${p.id}" aria-label="Bookmark ${escapeHtml(p.name)}" type="button">
@@ -959,6 +961,19 @@ function escapeHtml(str){
   function isNew(p){
      const days = (Date.now() - new Date(p.date)) / 86400000;
      return days <= 30;
+   }
+  function fetchTokenPrices(){
+     const ids = [...new Set(allProjects().filter(p => p.coingeckoId).map(p => p.coingeckoId))];
+     if (ids.length === 0) return;
+     fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(",")}&vs_currencies=usd&include_24hr_change=true`)
+       .then(res => res.json())
+       .then(data => {
+         priceData = data;
+         renderGrid();
+       })
+       .catch(() => {
+         // CoinGecko didn't respond - cards just show without a price tag, no harm done
+       });
    }
 
 /* ---------------------------------------------------
@@ -1146,6 +1161,7 @@ renderStats();
 updateBookmarkUI();
   document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
    document.getElementById("copyrightYear").textContent = new Date().getFullYear();
+  fetchTokenPrices();
   window.addEventListener("scroll", () => {
      document.getElementById("backToTopBtn").classList.toggle("show", window.scrollY > 400);
    });
