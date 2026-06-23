@@ -396,6 +396,8 @@
    .price-tag span{ margin-left:auto; }
    .price-tag.up span{ color:var(--scan-green); }
    .price-tag.down span{ color:var(--loss-red); }
+  .price-tag.na{ color:var(--fog); }
+   .price-tag.points{ border-color:var(--amber); color:var(--amber); }
   .star-btn{
     background:none;
     border:none;
@@ -679,6 +681,7 @@
 
   <footer>
     <div>© <span id="copyrightYear"></span> Base Project Radar — a fan-made tracker, not affiliated with Base or Coinbase.</div>
+    <div class="mono" style="font-size:11px;color:var(--fog);">Price data via CoinGecko · not financial advice</div>
     <div class="mono" style="font-size:12px;color:var(--fog);">Page loaded: <span id="lastUpdated"></span></div>
  <div><a href="ROADMAP.md">Roadmap</a> &nbsp;·&nbsp; <a href="README.md">About this project</a> &nbsp;·&nbsp; <a href="https://github.com/smokinturtle/base-project-radar" target="_blank">View on GitHub ↗</a> &nbsp;·&nbsp; <a href="#top">↑ Back to top</a></div>
   </footer>
@@ -932,7 +935,12 @@ function renderGrid(){
           <div class="status ${p.status.toLowerCase()}"><span class="led"></span>${p.status}</div>
         </div>
       <div class="card-summary">${escapeHtml(p.summary)}</div>
-      ${p.coingeckoId && priceData[p.coingeckoId] ? `<div class="price-tag ${priceData[p.coingeckoId].usd_24h_change >= 0 ? "up" : "down"}">${p.ticker} $${priceData[p.coingeckoId].usd < 1 ? priceData[p.coingeckoId].usd.toFixed(4) : priceData[p.coingeckoId].usd.toFixed(2)}<span>${priceData[p.coingeckoId].usd_24h_change >= 0 ? "▲" : "▼"} ${Math.abs(priceData[p.coingeckoId].usd_24h_change).toFixed(1)}%</span></div>` : ""}
+     ${p.coingeckoId && priceData[p.coingeckoId]
+         ? `<div class="price-tag ${priceData[p.coingeckoId].usd_24h_change >= 0 ? "up" : "down"}">${p.ticker} $${priceData[p.coingeckoId].usd < 1 ? priceData[p.coingeckoId].usd.toFixed(4) : priceData[p.coingeckoId].usd.toFixed(2)}<span>${priceData[p.coingeckoId].usd_24h_change >= 0 ? "▲" : "▼"} ${Math.abs(priceData[p.coingeckoId].usd_24h_change).toFixed(1)}%</span></div>`
+         : p.tokenStatus === "points"
+           ? `<div class="price-tag points">Points program · no token yet</div>`
+           : `<div class="price-tag na">No token · N/A</div>`
+       }
       <div class="card-bottom">
         <span class="category-tag mono">${escapeHtml(p.category)}</span>
         <button class="star-btn ${bookmarks.has(p.id) ? "bookmarked" : ""}" data-id="${p.id}" aria-label="Bookmark ${escapeHtml(p.name)}" type="button">
