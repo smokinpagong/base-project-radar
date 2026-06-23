@@ -643,6 +643,12 @@
       <option value="az">Name A–Z</option>
       <option value="bookmarked">Bookmarked first</option>
     </select>
+    <select id="statusSelect" class="mono">
+     <option value="all">All statuses</option>
+     <option value="Live">Live only</option>
+     <option value="Beta">Beta only</option>
+     <option value="Building">Building only</option>
+   </select>
     <button class="btn-primary" id="openSubmitBtn" type="button">+ Submit a project</button>
     <button class="btn-primary" id="surpriseBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">🎲 Surprise me</button>
     <button class="btn-primary" id="exportBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">⬇ Export bookmarks</button>
@@ -823,6 +829,7 @@ let bookmarks = new Set(JSON.parse(localStorage.getItem("bpr_bookmarks") || "[]"
 let activeCategory = "All";
 let showBookmarksOnly = false;
 let searchTerm = "";
+  let statusFilter = "all";
 let sortMode = "newest";
   const themeToggleBtn = document.getElementById("themeToggleBtn");
    function applyTheme(theme){
@@ -863,6 +870,7 @@ const gridMeta = document.getElementById("gridMeta");
 function getFiltered(){
   let list = allProjects();
   if (activeCategory !== "All") list = list.filter(p => p.category === activeCategory);
+  if (statusFilter !== "all") list = list.filter(p => p.status === statusFilter);
   if (showBookmarksOnly) list = list.filter(p => bookmarks.has(p.id));
   if (searchTerm.trim()) {
     const t = searchTerm.toLowerCase();
@@ -1068,6 +1076,10 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
   sortMode = e.target.value;
   renderGrid();
 });
+  document.getElementById("statusSelect").addEventListener("change", (e) => {
+     statusFilter = e.target.value;
+     renderGrid();
+   });
   document.addEventListener("keydown", (e) => {
      if (e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
        e.preventDefault();
