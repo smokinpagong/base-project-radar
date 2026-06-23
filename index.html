@@ -1005,7 +1005,7 @@ function closeModal(overlay){ overlay.classList.remove("open"); }
      renderGrid();
    }
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") { closeModal(detailOverlay); closeModal(submitOverlay); }
+  if (e.key === "Escape") { closeModal(detailOverlay); closeModal(submitOverlay); radarOpsPanel.classList.remove("open"); }
 });
 
 /* ---------------------------------------------------
