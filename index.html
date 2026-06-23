@@ -641,6 +641,7 @@
     <select id="sortSelect" class="mono">
       <option value="newest">Newest first</option>
       <option value="az">Name A–Z</option>
+      <option value="bookmarked">Bookmarked first</option>
     </select>
     <button class="btn-primary" id="openSubmitBtn" type="button">+ Submit a project</button>
     <button class="btn-primary" id="surpriseBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">🎲 Surprise me</button>
@@ -872,10 +873,12 @@ function getFiltered(){
     );
   }
   if (sortMode === "az") {
-    list = [...list].sort((a,b) => a.name.localeCompare(b.name));
-  } else {
-    list = [...list].sort((a,b) => new Date(b.date) - new Date(a.date));
-  }
+       list = [...list].sort((a,b) => a.name.localeCompare(b.name));
+     } else if (sortMode === "bookmarked") {
+       list = [...list].sort((a,b) => (bookmarks.has(b.id) - bookmarks.has(a.id)) || (new Date(b.date) - new Date(a.date)));
+     } else {
+       list = [...list].sort((a,b) => new Date(b.date) - new Date(a.date));
+     }
   return list;
 }
 
