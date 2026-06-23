@@ -32,6 +32,18 @@
     --amber: #ffb454;
     --radius: 10px;
   }
+  :root[data-theme="light"]{
+     --void: #f5f7fa;
+     --signal-blue: #0052ff;
+     --signal-blue-dim: #0052ff1a;
+     --scan-green: #0a8a4a;
+     --scan-green-dim: #0a8a4a1a;
+     --panel: #ffffff;
+     --panel-hover: #f0f2f6;
+     --grid-line: #dde2ea;
+     --fog: #6b7280;
+     --paper: #11151c;
+   }
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -122,6 +134,17 @@
     color:var(--scan-green);
     background:var(--scan-green-dim);
   }
+  .theme-toggle{
+     background:var(--panel);
+     border:1px solid var(--grid-line);
+     color:var(--paper);
+     width:38px; height:38px;
+     border-radius:50%;
+     cursor:pointer;
+     font-size:16px;
+     margin-right:10px;
+   }
+   .theme-toggle:hover{ border-color:var(--signal-blue); }
   .bookmarks-pill svg{ width:14px; height:14px; }
 
   /* ---------- hero / radar ---------- */
@@ -562,6 +585,7 @@
       <span class="dot"></span>
       BASE PROJECT RADAR
     </div>
+    <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="Toggle light and dark mode">🌙</button>
     <button class="bookmarks-pill" id="bookmarkToggleBtn" type="button">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
       <span id="bookmarkCount">0</span> saved
@@ -799,6 +823,17 @@ let activeCategory = "All";
 let showBookmarksOnly = false;
 let searchTerm = "";
 let sortMode = "newest";
+  const themeToggleBtn = document.getElementById("themeToggleBtn");
+   function applyTheme(theme){
+     document.documentElement.setAttribute("data-theme", theme);
+     themeToggleBtn.textContent = theme === "light" ? "☀️" : "🌙";
+     localStorage.setItem("bpr_theme", theme);
+   }
+   themeToggleBtn.addEventListener("click", () => {
+     const current = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+     applyTheme(current);
+   });
+   applyTheme(localStorage.getItem("bpr_theme") || "dark");
 
 function allProjects(){ return [...SEED_PROJECTS, ...userSubmitted]; }
 
