@@ -652,6 +652,8 @@
     <button class="btn-primary" id="openSubmitBtn" type="button">+ Submit a project</button>
     <button class="btn-primary" id="surpriseBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">🎲 Surprise me</button>
     <button class="btn-primary" id="exportBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">⬇ Export bookmarks</button>
+    <button class="btn-primary" id="importBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">⬆ Import bookmarks</button>
+   <input type="file" id="importFileInput" accept=".json" style="display:none;">
   </div>
 
   <section class="grid-section">
@@ -1027,6 +1029,28 @@ document.getElementById("openSubmitBtn").addEventListener("click", () => submitO
      a.click();
      URL.revokeObjectURL(url);
      showToast("Bookmarks exported!");
+   });
+  document.getElementById("importBtn").addEventListener("click", () => {
+     document.getElementById("importFileInput").click();
+   });
+   document.getElementById("importFileInput").addEventListener("change", (e) => {
+     const file = e.target.files[0];
+     if (!file) return;
+     const reader = new FileReader();
+     reader.onload = (event) => {
+       try {
+         const importedList = JSON.parse(event.target.result);
+         importedList.forEach(p => { if (p.id) bookmarks.add(p.id); });
+         localStorage.setItem("bpr_bookmarks", JSON.stringify([...bookmarks]));
+         updateBookmarkUI();
+         renderGrid();
+         showToast("Bookmarks imported!");
+       } catch (err) {
+         showToast("Could not read that file.");
+       }
+     };
+     reader.readAsText(file);
+     e.target.value = "";
    });
 document.getElementById("submitClose").addEventListener("click", () => closeModal(submitOverlay));
 submitOverlay.addEventListener("click", (e) => { if (e.target === submitOverlay) closeModal(submitOverlay); });
