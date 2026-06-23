@@ -31,6 +31,7 @@
     --paper: #eaedf2;
     --amber: #ffb454;
     --radius: 10px;
+    --loss-red: #ff5c5c;
   }
   :root[data-theme="light"]{
      --void: #f5f7fa;
@@ -43,6 +44,7 @@
      --grid-line: #dde2ea;
      --fog: #6b7280;
      --paper: #11151c;
+    --loss-red: #d92d2d;
    }
 
   *{box-sizing:border-box;}
@@ -380,6 +382,20 @@
      text-transform:uppercase;
      letter-spacing:0.05em;
    }
+  .price-tag{
+     font-family:"JetBrains Mono",monospace;
+     font-size:11.5px;
+     display:flex;
+     align-items:center;
+     gap:6px;
+     padding:6px 10px;
+     border-radius:8px;
+     background:var(--void);
+     border:1px solid var(--grid-line);
+   }
+   .price-tag span{ margin-left:auto; }
+   .price-tag.up span{ color:var(--scan-green); }
+   .price-tag.down span{ color:var(--loss-red); }
   .star-btn{
     background:none;
     border:none;
@@ -755,11 +771,11 @@ const SEED_PROJECTS = [
   { id:"s1", name:"Aerodrome Finance", category:"DeFi", status:"Live",
     summary:"A leading decentralized exchange and liquidity hub built natively on Base.",
     description:"Aerodrome is a central liquidity venue on Base, combining AMM trading with vote-escrowed token incentives to direct rewards toward active pools.",
-    link:"https://aerodrome.finance", tags:["dex","amm","liquidity"], date:"2024-08-01" },
+    link:"https://aerodrome.finance", tags:["dex","amm","liquidity"], date:"2024-08-01", coingeckoId:"aerodrome-finance", ticker:"AERO" },
   { id:"s2", name:"Moonwell", category:"DeFi", status:"Live",
     summary:"A lending and borrowing protocol available on Base for supplying and borrowing crypto assets.",
     description:"Moonwell lets users supply assets to earn yield or borrow against collateral, with markets deployed across Base and other networks.",
-    link:"https://moonwell.fi", tags:["lending","borrowing","money-market"], date:"2024-07-10" },
+    link:"https://moonwell.fi", tags:["lending","borrowing","money-market"], date:"2024-07-10", coingeckoId:"moonwell", ticker:"WELL" },
   { id:"s3", name:"Seamless Protocol", category:"DeFi", status:"Live",
     summary:"A lending protocol built on Base focused on simple, low-friction borrowing and lending.",
     description:"Seamless offers core money-market features — supplying, borrowing, and collateral management — designed specifically around the Base network.",
@@ -791,7 +807,7 @@ const SEED_PROJECTS = [
   { id:"s10", name:"Pyth Network", category:"Infra", status:"Live",
     summary:"A first-party financial oracle network providing real-time price feeds, available on Base.",
     description:"Pyth streams price data directly from exchanges and trading firms on-chain, giving Base apps access to low-latency market data.",
-    link:"https://pyth.network", tags:["oracle","price-feeds","infrastructure"], date:"2023-09-22" },
+    link:"https://pyth.network", tags:["oracle","price-feeds","infrastructure"], date:"2023-09-22", coingeckoId:"pyth-network", ticker:"PYTH" },
   { id:"s11", name:"Base Bridge", category:"Infra", status:"Live",
     summary:"The official bridge for moving assets between Ethereum and Base.",
     description:"Base Bridge is the canonical way to move ETH and tokens between Ethereum mainnet and Base, secured by the underlying rollup design.",
@@ -807,15 +823,15 @@ const SEED_PROJECTS = [
   { id:"s14", name:"Aave", category:"DeFi", status:"Live",
        summary:"A major lending and borrowing protocol with markets deployed on Base.",
        description:"Aave lets users supply crypto to earn interest or borrow against collateral, with a Base deployment extending its money markets to the network.",
-       link:"https://aave.com", tags:["lending","money-market"], date:"2024-04-10" },
+       link:"https://aave.com", tags:["lending","money-market"], date:"2024-04-10", coingeckoId:"aave", ticker:"AAVE" },
   { id:"s15", name:"Uniswap", category:"DeFi", status:"Live",
        summary:"A major decentralized exchange protocol with deployments across many chains, including Base.",
        description:"Uniswap lets users swap tokens directly through liquidity pools without a centralized order book, with markets available on Base alongside Ethereum and other networks.",
-       link:"https://uniswap.org", tags:["dex","amm","swap"], date:"2024-09-01" },
+       link:"https://uniswap.org", tags:["dex","amm","swap"], date:"2024-09-01", coingeckoId:"uniswap", ticker:"UNI" },
      { id:"s16", name:"Compound", category:"DeFi", status:"Live",
        summary:"A long-running lending and borrowing protocol with markets deployed on Base.",
        description:"Compound lets users supply assets to earn interest or borrow against collateral, using one of the earliest and most established money-market designs in DeFi.",
-       link:"https://compound.finance", tags:["lending","money-market"], date:"2024-03-01" },
+       link:"https://compound.finance", tags:["lending","money-market"], date:"2024-03-01", coingeckoId:"compound", ticker:"COMP" },
      { id:"s17", name:"Daimo", category:"Infra", status:"Live",
        summary:"A self-custody payments app built around fast, low-cost stablecoin transfers on Base.",
        description:"Daimo focuses on making everyday stablecoin payments simple, combining a wallet with fast settlement on Base.",
