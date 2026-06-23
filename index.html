@@ -556,6 +556,11 @@
      cursor:pointer;
    }
    .copy-btn:hover{ border-color:var(--scan-green); color:var(--scan-green); }
+  .related-projects{ margin-top:18px; padding-top:14px; border-top:1px solid var(--grid-line); }
+   .related-label{ font-family:"JetBrains Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--fog); margin-bottom:8px; }
+   .related-list{ display:flex; gap:8px; flex-wrap:wrap; }
+   .related-chip{ font-family:"JetBrains Mono",monospace; font-size:12px; background:var(--void); border:1px solid var(--grid-line); color:var(--paper); padding:6px 12px; border-radius:999px; cursor:pointer; }
+   .related-chip:hover{ border-color:var(--signal-blue); color:var(--signal-blue); }
 
   /* ---------- submit form ---------- */
   .field{ margin-bottom:14px; display:flex; flex-direction:column; gap:6px; }
@@ -1095,6 +1100,12 @@ function openDetail(p){
          <a class="copy-btn" style="text-decoration:none;" href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Found this on Base Project Radar: ' + p.name)}&url=${encodeURIComponent(p.link)}" target="_blank" rel="noopener noreferrer">Share on X</a>
          <a class="copy-btn" style="text-decoration:none;" href="https://github.com/smokinturtle/base-project-radar/issues/new?template=suggest-a-project.md&title=${encodeURIComponent('[Edit] ' + p.name)}" target="_blank" rel="noopener noreferrer">Suggest an edit</a>
        </div>
+       <div class="related-projects">
+         <div class="related-label">Related in ${escapeHtml(p.category)}</div>
+         <div class="related-list">
+           ${allProjects().filter(rp => rp.category === p.category && rp.id !== p.id).slice(0,3).map(rp => `<button type="button" class="related-chip" onclick='openDetailById("${rp.id}")'>${escapeHtml(rp.name)}</button>`).join("") || '<span style="color:var(--fog);font-size:12px;">No other projects in this category yet.</span>'}
+         </div>
+       </div>
      `;
      detailOverlay.classList.add("open");
      document.getElementById("copyLinkBtn").addEventListener("click", () => {
@@ -1109,6 +1120,10 @@ function closeModal(overlay){ overlay.classList.remove("open"); }
      document.getElementById("searchInput").value = tag;
      searchTerm = tag;
      renderGrid();
+   }
+  function openDetailById(id){
+     const project = allProjects().find(p => p.id === id);
+     if (project) openDetail(project);
    }
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { closeModal(detailOverlay); closeModal(submitOverlay); radarOpsPanel.classList.remove("open"); }
