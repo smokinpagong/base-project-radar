@@ -715,6 +715,7 @@
      <option value="Beta">Beta only</option>
      <option value="Building">Building only</option>
    </select>
+   <button class="btn-primary" id="copyViewLinkBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">🔗 Copy link to this view</button>
     <button class="btn-primary" id="openSubmitBtn" type="button">+ Submit a project</button>
     <button class="btn-primary" id="surpriseBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">🎲 Surprise me</button>
     <button class="btn-primary" id="exportBtn" type="button" style="background:var(--panel);border:1px solid var(--grid-line);color:var(--paper);">⬇ Export bookmarks</button>
@@ -731,7 +732,7 @@
     <div>© <span id="copyrightYear"></span> Base Project Radar — a fan-made tracker, not affiliated with Base or Coinbase.</div>
     <div class="mono" style="font-size:11px;color:var(--fog);">Price data via CoinGecko · not financial advice</div>
     <div class="mono" style="font-size:12px;color:var(--fog);">Page loaded: <span id="lastUpdated"></span></div>
- <div><a href="ROADMAP.md">Roadmap</a> &nbsp;·&nbsp; <a href="README.md">About this project</a> &nbsp;·&nbsp; <a href="https://github.com/smokinturtle/base-project-radar" target="_blank">View on GitHub ↗</a> &nbsp;·&nbsp; <a href="#top">↑ Back to top</a></div>
+ <div><a href="ROADMAP.md">Roadmap</a> &nbsp;·&nbsp; <a href="README.md">About this project</a> &nbsp;·&nbsp; <a href="https://github.com/smokinpagong/base-project-radar" target="_blank">View on GitHub ↗</a> &nbsp;·&nbsp; <a href="#top">↑ Back to top</a></div>
   </footer>
 </div>
 
@@ -1008,6 +1009,7 @@ function renderGrid(){
     });
     grid.appendChild(card);
   });
+  updateUrlFromState();
 }
 
 function escapeHtml(str){
@@ -1031,6 +1033,22 @@ function escapeHtml(str){
        .catch(() => {
          // CoinGecko didn't respond - cards just show without a price tag, no harm done
        });
+   }
+  function updateUrlFromState(){
+     const params = new URLSearchParams();
+     if (activeCategory !== "All") params.set("category", activeCategory);
+     if (searchTerm.trim()) params.set("q", searchTerm.trim());
+     if (statusFilter !== "all") params.set("status", statusFilter);
+     if (sortMode !== "newest") params.set("sort", sortMode);
+     const query = params.toString();
+     history.replaceState(null, "", query ? "?" + query : window.location.pathname);
+   }
+   function applyStateFromUrl(){
+     const params = new URLSearchParams(window.location.search);
+     if (params.has("category") && CATEGORIES.includes(params.get("category"))) activeCategory = params.get("category");
+     if (params.has("q")) { searchTerm = params.get("q"); document.getElementById("searchInput").value = searchTerm; }
+     if (params.has("status") && ["all","Live","Beta","Building"].includes(params.get("status"))) { statusFilter = params.get("status"); document.getElementById("statusSelect").value = statusFilter; }
+     if (params.has("sort") && ["newest","az","bookmarked"].includes(params.get("sort"))) { sortMode = params.get("sort"); document.getElementById("sortSelect").value = sortMode; }
    }
 
 /* ---------------------------------------------------
@@ -1140,7 +1158,11 @@ document.getElementById("openSubmitBtn").addEventListener("click", () => submitO
      reader.readAsText(file);
      e.target.value = "";
    });
-document.getElementById("submitClose").addEventListener("click", () => closeModal(submitOverlay));
+document.getElementById("copyViewLinkBtn").addEventListener("click", () => {
+     navigator.clipboard.writeText(window.location.href);
+     showToast("Link copied! Anyone who opens it sees this same filtered view.");
+   });
+  document.getElementById("submitClose").addEventListener("click", () => closeModal(submitOverlay));
 submitOverlay.addEventListener("click", (e) => { if (e.target === submitOverlay) closeModal(submitOverlay); });
 
 document.getElementById("submitForm").addEventListener("submit", (e) => {
@@ -1221,7 +1243,8 @@ function renderStats(){
 /* ---------------------------------------------------
    INIT
 --------------------------------------------------- */
-renderChips();
+applyStateFromUrl();
+  renderChips();
 renderGrid();
 renderStats();
 updateBookmarkUI();
