@@ -1069,9 +1069,77 @@ updateBookmarkUI();
      if (!text) return;
      addRadarOpsMessage(text, "user");
      input.value = "";
-     addRadarOpsMessage("...", "bot");
+     handleRadarOpsCommand(text);
    });
-  console.log("👋 Hey, fellow developer! This radar was hand-built by smokinturtle while learning to code: https://github.com/smokinturtle/base-project-radar");
+  function handleRadarOpsCommand(text){
+     const t = text.toLowerCase();
+     const matchedCategory = CATEGORIES.find(c => c !== "All" && t.includes(c.toLowerCase()));
+
+     if (t.includes("bookmark") || t.includes("saved")) {
+       showBookmarksOnly = true;
+       bookmarkToggleBtn.classList.add("active");
+       renderGrid();
+       addRadarOpsMessage(`Showing your ${bookmarks.size} bookmarked project${bookmarks.size === 1 ? "" : "s"}.`, "bot");
+       return;
+     }
+
+     if (t.includes("new")) {
+       activeCategory = "All";
+       showBookmarksOnly = false;
+       bookmarkToggleBtn.classList.remove("active");
+       searchTerm = "";
+       document.getElementById("searchInput").value = "";
+       sortMode = "newest";
+       document.getElementById("sortSelect").value = "newest";
+       renderChips();
+       renderGrid();
+       const newCount = allProjects().filter(isNew).length;
+       addRadarOpsMessage(newCount > 0 ? `Found ${newCount} project${newCount === 1 ? "" : "s"} added in the last 30 days, sorted to the top.` : "Nothing added in the last 30 days right now.", "bot");
+       return;
+     }
+
+     if (t.includes("surprise") || t.includes("random")) {
+       const list = allProjects();
+       const randomProject = list[Math.floor(Math.random() * list.length)];
+       openDetail(randomProject);
+       addRadarOpsMessage(`Scanning... pulled up ${randomProject.name}.`, "bot");
+       return;
+     }
+
+     if (t.includes("reset") || t.includes("all projects") || t === "all") {
+       activeCategory = "All";
+       showBookmarksOnly = false;
+       bookmarkToggleBtn.classList.remove("active");
+       searchTerm = "";
+       document.getElementById("searchInput").value = "";
+       renderChips();
+       renderGrid();
+       addRadarOpsMessage("Cleared filters. Showing everything on the radar.", "bot");
+       return;
+     }
+
+     if (matchedCategory) {
+       activeCategory = matchedCategory;
+       showBookmarksOnly = false;
+       bookmarkToggleBtn.classList.remove("active");
+       renderChips();
+       renderGrid();
+       const count = allProjects().filter(p => p.category === matchedCategory).length;
+       addRadarOpsMessage(`Filtered to ${matchedCategory} — ${count} project${count === 1 ? "" : "s"} found.`, "bot");
+       return;
+     }
+
+     showBookmarksOnly = false;
+     bookmarkToggleBtn.classList.remove("active");
+     activeCategory = "All";
+     renderChips();
+     searchTerm = text;
+     document.getElementById("searchInput").value = text;
+     renderGrid();
+     const count = getFiltered().length;
+     addRadarOpsMessage(count > 0 ? `Searched for "${text}" — ${count} match${count === 1 ? "" : "es"}.` : `No matches for "${text}". Try a category like DeFi, NFT, Infra, Social, or Tooling.`, "bot");
+   }
+  console.log("👋 Hey, fellow developer! This radar was hand-built by smokinpagong while learning to code: https://github.com/smokinpagong/base-project-radar");
 </script>
 </body>
 </html>
