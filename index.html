@@ -196,6 +196,46 @@
     text-transform:uppercase;
     letter-spacing:0.08em;
   }
+  .featured-banner{
+     display:flex;
+     align-items:center;
+     justify-content:space-between;
+     gap:16px;
+     background:linear-gradient(90deg, var(--signal-blue-dim), transparent);
+     border:1px solid var(--signal-blue);
+     border-radius:var(--radius);
+     padding:16px 20px;
+     margin:24px 0;
+     flex-wrap:wrap;
+   }
+   .featured-banner .label{
+     font-family:"JetBrains Mono",monospace;
+     font-size:11px;
+     text-transform:uppercase;
+     letter-spacing:0.1em;
+     color:var(--scan-green);
+     margin-bottom:4px;
+   }
+   .featured-banner h3{
+     font-family:"Space Grotesk",sans-serif;
+     margin:0 0 4px;
+     font-size:18px;
+   }
+   .featured-banner p{
+     margin:0;
+     color:var(--fog);
+     font-size:13.5px;
+     max-width:480px;
+   }
+   .featured-banner a{
+     font-family:"JetBrains Mono",monospace;
+     font-size:13px;
+     background:var(--signal-blue);
+     color:#fff;
+     padding:10px 16px;
+     border-radius:var(--radius);
+     white-space:nowrap;
+   }
 
   .radar-box{
     flex:0 0 280px;
@@ -650,6 +690,14 @@
     </div>
   </section>
 
+ <div class="featured-banner" id="featuredBanner" style="display:none;">
+     <div>
+       <div class="label">📌 Project of the week</div>
+       <h3 id="featuredName"></h3>
+       <p id="featuredSummary"></p>
+     </div>
+     <a href="#" id="featuredLink" target="_blank" rel="noopener noreferrer">View project ↗</a>
+   </div>
   <div class="controls">
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -845,6 +893,7 @@ const SEED_PROJECTS = [
    STATE
 --------------------------------------------------- */
 const CATEGORIES = ["All","DeFi","NFT","Infra","Social","Tooling"];
+  const FEATURED_PROJECT_ID = "s1";
 let userSubmitted = JSON.parse(localStorage.getItem("bpr_submitted") || "[]");
 let bookmarks = new Set(JSON.parse(localStorage.getItem("bpr_bookmarks") || "[]"));
 let activeCategory = "All";
@@ -1159,6 +1208,15 @@ function renderStats(){
   document.getElementById("statLive").textContent = list.filter(p => p.status === "Live").length;
   document.getElementById("statCats").textContent = new Set(list.map(p => p.category)).size;
 }
+  function renderFeatured(){
+     const project = allProjects().find(p => p.id === FEATURED_PROJECT_ID);
+     const banner = document.getElementById("featuredBanner");
+     if (!project) { banner.style.display = "none"; return; }
+     document.getElementById("featuredName").textContent = project.name;
+     document.getElementById("featuredSummary").textContent = project.summary;
+     document.getElementById("featuredLink").href = project.link;
+     banner.style.display = "flex";
+   }
 
 /* ---------------------------------------------------
    INIT
@@ -1170,6 +1228,7 @@ updateBookmarkUI();
   document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
    document.getElementById("copyrightYear").textContent = new Date().getFullYear();
   fetchTokenPrices();
+  renderFeatured();
   window.addEventListener("scroll", () => {
      document.getElementById("backToTopBtn").classList.toggle("show", window.scrollY > 400);
    });
