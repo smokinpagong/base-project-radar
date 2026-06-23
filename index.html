@@ -697,6 +697,12 @@
        <button type="button" id="radarOpsClose" aria-label="Close chat">✕</button>
      </div>
      <div class="radarops-messages" id="radarOpsMessages"></div>
+     <div style="display:flex; gap:6px; padding:0 14px 10px; flex-wrap:wrap;">
+     <button type="button" class="radarops-suggest-btn" data-text="show me DeFi" style="font-family:'JetBrains Mono',monospace; font-size:11px; background:var(--void); border:1px solid var(--grid-line); color:var(--fog); padding:5px 10px; border-radius:999px; cursor:pointer;">DeFi</button>
+     <button type="button" class="radarops-suggest-btn" data-text="show me NFT" style="font-family:'JetBrains Mono',monospace; font-size:11px; background:var(--void); border:1px solid var(--grid-line); color:var(--fog); padding:5px 10px; border-radius:999px; cursor:pointer;">NFT</button>
+     <button type="button" class="radarops-suggest-btn" data-text="what's new" style="font-family:'JetBrains Mono',monospace; font-size:11px; background:var(--void); border:1px solid var(--grid-line); color:var(--fog); padding:5px 10px; border-radius:999px; cursor:pointer;">What's new</button>
+     <button type="button" class="radarops-suggest-btn" data-text="surprise me" style="font-family:'JetBrains Mono',monospace; font-size:11px; background:var(--void); border:1px solid var(--grid-line); color:var(--fog); padding:5px 10px; border-radius:999px; cursor:pointer;">Surprise me</button>
+   </div>
      <form class="radarops-input-row" id="radarOpsForm">
        <input type="text" id="radarOpsInput" placeholder="Ask me about a project or category..." autocomplete="off">
        <button type="submit" aria-label="Send">➤</button>
@@ -1139,6 +1145,12 @@ updateBookmarkUI();
      const count = getFiltered().length;
      addRadarOpsMessage(count > 0 ? `Searched for "${text}" — ${count} match${count === 1 ? "" : "es"}.` : `No matches for "${text}". Try a category like DeFi, NFT, Infra, Social, or Tooling.`, "bot");
    }
+  document.querySelectorAll(".radarops-suggest-btn").forEach(btn => {
+     btn.addEventListener("click", () => {
+       document.getElementById("radarOpsInput").value = btn.dataset.text;
+       document.getElementById("radarOpsForm").requestSubmit();
+     });
+   });
   console.log("👋 Hey, fellow developer! This radar was hand-built by smokinpagong while learning to code: https://github.com/smokinpagong/base-project-radar");
 </script>
 </body>
