@@ -742,6 +742,10 @@
    <input type="file" id="importFileInput" accept=".json" style="display:none;">
   </div>
 
+  <div id="tagCloudWrap" style="margin:18px 0; display:none;">
+     <div class="related-label">🏷 Popular tags</div>
+     <div class="related-list" id="tagCloudList"></div>
+   </div>
   <section class="grid-section">
     <div class="grid-meta" id="gridMeta"></div>
     <div class="grid" id="grid"></div>
@@ -1292,6 +1296,15 @@ function renderStats(){
      document.getElementById("featuredLink").href = project.link;
      banner.style.display = "flex";
    }
+  function renderTagCloud(){
+     const counts = {};
+     allProjects().forEach(p => (p.tags || []).forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
+     const topTags = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0,10).map(([tag]) => tag);
+     const wrap = document.getElementById("tagCloudWrap");
+     if (topTags.length === 0) { wrap.style.display = "none"; return; }
+     wrap.style.display = "block";
+     document.getElementById("tagCloudList").innerHTML = topTags.map(tag => `<button type="button" class="related-chip" onclick='filterByTagFromModal("${tag}")'>${escapeHtml(tag)}</button>`).join("");
+   }
   function addToRecentlyViewed(id){
      recentlyViewed = [id, ...recentlyViewed.filter(rid => rid !== id)].slice(0,5);
      localStorage.setItem("bpr_recent", JSON.stringify(recentlyViewed));
@@ -1317,6 +1330,7 @@ updateBookmarkUI();
    document.getElementById("copyrightYear").textContent = new Date().getFullYear();
   fetchTokenPrices();
   renderFeatured();
+  renderTagCloud();
   renderRecentlyViewed();
   window.addEventListener("scroll", () => {
      document.getElementById("backToTopBtn").classList.toggle("show", window.scrollY > 400);
