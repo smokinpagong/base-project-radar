@@ -932,16 +932,18 @@ function allProjects(){ return [...SEED_PROJECTS, ...userSubmitted]; }
 --------------------------------------------------- */
 const chipRow = document.getElementById("chipRow");
 function renderChips(){
-  chipRow.innerHTML = "";
-  CATEGORIES.forEach(cat => {
-    const chip = document.createElement("button");
-    chip.className = "chip" + (activeCategory === cat ? " active" : "");
-    chip.textContent = cat;
-    chip.type = "button";
-    chip.addEventListener("click", () => { activeCategory = cat; renderChips(); renderGrid(); });
-    chipRow.appendChild(chip);
-  });
-}
+     chipRow.innerHTML = "";
+     const list = allProjects();
+     CATEGORIES.forEach(cat => {
+       const count = cat === "All" ? list.length : list.filter(p => p.category === cat).length;
+       const chip = document.createElement("button");
+       chip.className = "chip" + (activeCategory === cat ? " active" : "");
+       chip.textContent = `${cat} (${count})`;
+       chip.type = "button";
+       chip.addEventListener("click", () => { activeCategory = cat; renderChips(); renderGrid(); });
+       chipRow.appendChild(chip);
+     });
+   }
 
 /* ---------------------------------------------------
    RENDER: grid
