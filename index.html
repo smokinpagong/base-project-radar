@@ -937,6 +937,7 @@ const SEED_PROJECTS = [
    STATE
 --------------------------------------------------- */
 const CATEGORIES = ["All","DeFi","NFT","Infra","Social","Tooling"];
+  const CATEGORY_ICONS = { DeFi:"💰", NFT:"🎨", Infra:"🛠️", Social:"💬", Tooling:"🔧" };
   const FEATURED_PROJECT_ID = "s1";
 let userSubmitted = JSON.parse(localStorage.getItem("bpr_submitted") || "[]");
 let bookmarks = new Set(JSON.parse(localStorage.getItem("bpr_bookmarks") || "[]"));
@@ -1038,7 +1039,7 @@ function renderGrid(){
            : `<div class="price-tag na">No token · N/A</div>`
        }
       <div class="card-bottom">
-        <span class="category-tag mono">${escapeHtml(p.category)}</span>
+        <span class="category-tag mono">${CATEGORY_ICONS[p.category] || ""} ${escapeHtml(p.category)}</span>
         <button class="star-btn ${bookmarks.has(p.id) ? "bookmarked" : ""}" data-id="${p.id}" aria-label="Bookmark ${escapeHtml(p.name)}" type="button">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
         </button>
