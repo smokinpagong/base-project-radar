@@ -525,6 +525,17 @@
     cursor:pointer; font-size:20px; line-height:1;
   }
   .modal-close:hover{ color:var(--paper); }
+  .modal-nav{ position:absolute; top:18px; left:18px; display:flex; gap:6px; }
+   .modal-nav-btn{
+     background:var(--panel);
+     border:1px solid var(--grid-line);
+     color:var(--paper);
+     width:30px; height:30px;
+     border-radius:50%;
+     cursor:pointer;
+     font-size:16px;
+   }
+   .modal-nav-btn:hover{ border-color:var(--signal-blue); color:var(--signal-blue); }
   .modal h2{
     font-family:"Space Grotesk", sans-serif;
     margin:0 0 4px;
@@ -763,6 +774,10 @@
 <div class="overlay" id="detailOverlay">
   <div class="modal" id="detailModal" role="dialog" aria-modal="true">
     <button class="modal-close" id="detailClose" aria-label="Close">✕</button>
+    <div class="modal-nav">
+     <button type="button" id="detailPrevBtn" class="modal-nav-btn" aria-label="Previous project">‹</button>
+     <button type="button" id="detailNextBtn" class="modal-nav-btn" aria-label="Next project">›</button>
+   </div>
     <div id="detailContent"></div>
   </div>
 </div>
@@ -946,6 +961,7 @@ let showBookmarksOnly = false;
 let searchTerm = "";
   let statusFilter = "all";
   let priceData = {};
+  let currentDetailId = null;
   let recentlyViewed = JSON.parse(localStorage.getItem("bpr_recent") || "[]");
 let sortMode = "newest";
   const themeToggleBtn = document.getElementById("themeToggleBtn");
@@ -1128,6 +1144,7 @@ document.getElementById("detailClose").addEventListener("click", () => closeModa
 detailOverlay.addEventListener("click", (e) => { if (e.target === detailOverlay) closeModal(detailOverlay); });
 
 function openDetail(p){
+  currentDetailId = p.id;
   detailContent.innerHTML = `
     <div class="status ${p.status.toLowerCase()}"><span class="led"></span>${p.status}</div>
     <h2>${escapeHtml(p.name)}</h2>
@@ -1168,6 +1185,17 @@ function closeModal(overlay){ overlay.classList.remove("open"); }
      const project = allProjects().find(p => p.id === id);
      if (project) openDetail(project);
    }
+  function navigateDetail(direction){
+      const list = getFiltered();
+      if (list.length === 0) return;
+      const idx = list.findIndex(p => p.id === currentDetailId);
+      let newIdx = idx + direction;
+      if (newIdx < 0) newIdx = list.length - 1;
+      if (newIdx >= list.length) newIdx = 0;
+      openDetail(list[newIdx]);
+    }
+    document.getElementById("detailPrevBtn").addEventListener("click", () => navigateDetail(-1));
+    document.getElementById("detailNextBtn").addEventListener("click", () => navigateDetail(1));
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { closeModal(detailOverlay); closeModal(submitOverlay); radarOpsPanel.classList.remove("open"); }
 });
