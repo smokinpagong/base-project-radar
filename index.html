@@ -703,6 +703,10 @@
      </div>
      <a href="#" id="featuredLink" target="_blank" rel="noopener noreferrer">View project ↗</a>
    </div>
+  <div id="recentlyViewedWrap" style="display:none;margin:16px 0;">
+     <div class="related-label">👁 Recently viewed</div>
+     <div class="related-list" id="recentlyViewedList"></div>
+   </div>
   <div class="controls">
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -907,6 +911,7 @@ let showBookmarksOnly = false;
 let searchTerm = "";
   let statusFilter = "all";
   let priceData = {};
+  let recentlyViewed = JSON.parse(localStorage.getItem("bpr_recent") || "[]");
 let sortMode = "newest";
   const themeToggleBtn = document.getElementById("themeToggleBtn");
    function applyTheme(theme){
@@ -1108,6 +1113,7 @@ function openDetail(p){
        </div>
      `;
      detailOverlay.classList.add("open");
+  addToRecentlyViewed(p.id);
      document.getElementById("copyLinkBtn").addEventListener("click", () => {
        navigator.clipboard.writeText(p.link);
        showToast("Link copied!");
@@ -1254,6 +1260,18 @@ function renderStats(){
      document.getElementById("featuredLink").href = project.link;
      banner.style.display = "flex";
    }
+  function addToRecentlyViewed(id){
+     recentlyViewed = [id, ...recentlyViewed.filter(rid => rid !== id)].slice(0,5);
+     localStorage.setItem("bpr_recent", JSON.stringify(recentlyViewed));
+     renderRecentlyViewed();
+   }
+   function renderRecentlyViewed(){
+     const wrap = document.getElementById("recentlyViewedWrap");
+     const list = recentlyViewed.map(id => allProjects().find(p => p.id === id)).filter(Boolean);
+     if (list.length === 0) { wrap.style.display = "none"; return; }
+     wrap.style.display = "block";
+     document.getElementById("recentlyViewedList").innerHTML = list.map(p => `<button type="button" class="related-chip" onclick='openDetailById("${p.id}")'>${escapeHtml(p.name)}</button>`).join("");
+   }
 
 /* ---------------------------------------------------
    INIT
@@ -1267,6 +1285,7 @@ updateBookmarkUI();
    document.getElementById("copyrightYear").textContent = new Date().getFullYear();
   fetchTokenPrices();
   renderFeatured();
+  renderRecentlyViewed();
   window.addEventListener("scroll", () => {
      document.getElementById("backToTopBtn").classList.toggle("show", window.scrollY > 400);
    });
